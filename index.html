@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICMS a recolher na compra interestadual de carne — Gestão Contadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#11172A; --ink-70:#4A5468; --ink-40:#8D96A8;
+    --orange:#EC681D; --paper:#E9ECF1; --card:#FFFFFF; --line:#D3D8E1;
+    --bar-low:#11172A; --bar-mid:#5A6E9E; --bar-high:#EC681D;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);
+    font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
+    font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;
+    font-variant-numeric:tabular-nums;}
+  .sheet{max-width:1180px;margin:0 auto;background:var(--card);box-shadow:0 1px 0 rgba(17,23,42,.14)}
+
+  header{background:var(--ink);color:#fff;padding:20px 34px 20px;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+  .logo{width:34px;height:34px;flex:0 0 34px}
+  .brand .wm{line-height:1.15}
+  .brand .wm b{display:block;font-size:15px;font-weight:600;letter-spacing:.01em}
+  .brand .wm span{font-size:11.5px;color:#9AA4B8}
+  h1{margin:0;font-size:28px;font-weight:600;letter-spacing:-.024em;line-height:1.14;max-width:20em}
+  .subject{margin:9px 0 0;font-size:13.5px;color:#A8B1C4;max-width:47em}
+  .basis{text-align:right;font-size:12.5px;color:#A8B1C4;line-height:1.6;white-space:nowrap}
+  .basis .lbl{display:block;margin-bottom:2px}
+  .basis b{display:block;color:#fff;font-size:38px;font-weight:600;letter-spacing:-.03em;line-height:1.05}
+  .basis .nf{display:block;margin-top:8px;padding-top:8px;border-top:1px solid #2A3247;color:#C7CEDC}
+  .basis .nf strong{color:#fff;font-weight:600}
+
+  .verdict{display:flex;border-bottom:1px solid var(--line);background:#F4F6F9}
+  .verdict div{padding:14px 34px;border-right:1px solid var(--line);flex:1}
+  .verdict div:last-child{border-right:0}
+  .verdict strong{display:block;font-size:23px;font-weight:600;letter-spacing:-.025em;line-height:1.1}
+  .verdict p{margin:2px 0 0;font-size:12.5px;color:var(--ink-70)}
+  .hot strong{color:var(--orange)}
+
+  .controls{padding:20px 34px 6px;display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+  .controls h2{margin:0;font-size:16px;font-weight:600;letter-spacing:-.015em;flex:1}
+  .filter{display:flex;border:1px solid var(--ink);border-radius:2px;overflow:hidden}
+  .filter button{font:inherit;font-size:13px;font-weight:500;padding:7px 15px;background:#fff;
+    color:var(--ink);border:0;border-right:1px solid var(--line);cursor:pointer}
+  .filter button:last-child{border-right:0}
+  .filter button[aria-pressed="true"]{background:var(--ink);color:#fff}
+  .filter button:focus-visible{outline:2px solid var(--orange);outline-offset:-2px}
+
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  caption{caption-side:bottom;text-align:left;padding:12px 34px 0;font-size:11.5px;color:var(--ink-40);line-height:1.6}
+  th{font-size:11.5px;font-weight:500;color:var(--ink-70);text-align:right;padding:0 12px 7px;
+    border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child{text-align:left;padding-left:34px}
+  th:last-child{padding-right:34px}
+  td{padding:11px 12px;border-bottom:1px solid #EDEFF3;text-align:right;font-size:14px;white-space:nowrap}
+  td:first-child{text-align:left;padding-left:34px}
+  td:last-child{padding-right:34px}
+  .how{text-align:left !important;font-size:13px;color:var(--ink-70);white-space:normal}
+  tr.off{display:none}
+  tr.grp td{border-top:1px solid var(--line)}
+  tr.same .praca{font-weight:500;color:var(--ink-70)}
+  .praca{font-weight:600;font-size:15px;letter-spacing:-.01em}
+  .praca em{display:block;font-style:normal;font-size:12px;font-weight:400;color:var(--ink-40)}
+  .chip{display:inline-block;font-size:11.5px;padding:2px 8px;border:1px solid var(--line);
+    border-radius:11px;color:var(--ink-70)}
+  .nil{color:var(--ink-40)}
+  .bar-cell{width:26%;text-align:left !important;padding-left:12px}
+  .bar{display:flex;align-items:center;gap:10px}
+  .bar i{display:block;height:16px;background:var(--bar-mid);border-radius:1px}
+  .bar b{font-size:15px;font-weight:600;letter-spacing:-.015em;min-width:3.9em}
+  tr[data-level="low"] .bar i{background:var(--bar-low)}
+  tr[data-level="high"] .bar i{background:var(--bar-high)}
+  tr[data-level="high"] .bar b{color:var(--orange)}
+  tr[data-level="zero"] .bar b{color:var(--ink-40)}
+  .ref{font-size:11px;color:var(--ink-40);vertical-align:super;margin-left:2px}
+
+  .actions{padding:22px 34px 30px;border-top:1px solid var(--line);margin-top:14px}
+  .actions h2{margin:0 0 14px;font-size:16px;font-weight:600;letter-spacing:-.015em}
+  .acts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+  .act{background:#fff;padding:16px 18px}
+  .act h3{margin:0 0 6px;font-size:14px;font-weight:600;letter-spacing:-.01em}
+  .act p{margin:0;font-size:13px;color:var(--ink-70)}
+  .act .gain{display:block;margin-top:10px;padding-top:8px;border-top:1px solid #EDEFF3;
+    font-size:13px;font-weight:600;color:var(--orange)}
+  footer{background:#F4F6F9;border-top:1px solid var(--line);padding:14px 34px;font-size:11.5px;
+    color:var(--ink-40);display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+
+  @media (max-width:860px){
+    header,.controls,.actions,footer,.verdict div{padding-left:20px;padding-right:20px}
+    th:first-child,td:first-child{padding-left:20px}
+    th:last-child,td:last-child{padding-right:20px}
+    h1{font-size:23px}
+    .basis{text-align:left;white-space:normal}
+    .basis b{font-size:32px}
+    .verdict{flex-wrap:wrap}
+    .verdict div{flex:1 1 50%;border-bottom:1px solid var(--line)}
+    .acts{grid-template-columns:1fr}
+    .bar-cell{width:auto}
+  }
+  @media print{
+    @page{size:A4 landscape;margin:8mm}
+    body{background:#fff;font-size:11.5px}
+    .sheet{box-shadow:none;max-width:none}
+    .filter{display:none}
+    tr.off{display:table-row}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <header>
+    <div>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 40 40" role="img" aria-label="Gestão Contadores">
+          <rect width="40" height="40" fill="#EC681D"/>
+          <path d="M24.6 13.6a7.6 7.6 0 1 0 0 12.8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="square"/>
+          <rect x="19.4" y="18.3" width="8.4" height="3.4" fill="#fff"/>
+        </svg>
+        <span class="wm"><b>Gestão Contadores</b><span>Contabilidade e BPO Financeiro</span></span>
+      </div>
+      <h1>Além do preço da carne, o grupo recolhe de 0% a 13% de ICMS na entrada</h1>
+      <p class="subject">Carne bovina desossada e congelada (NCM 0202.30.00) comprada em São Paulo para as cinco praças do grupo. O ICMS destacado na nota já está embutido no preço, como em qualquer compra interna — o que está medido aqui é só o imposto que cada unidade recolhe por fora: DIFAL e substituição tributária.</p>
+    </div>
+    <div class="basis">
+      <span class="lbl">Compra de referência</span>
+      <b>R$ 1.008,53</b>
+      <span class="nf">Nota fiscal <strong>721 874</strong><br>VJP Comércio de Produtos Alimentícios Ltda</span>
+    </div>
+  </header>
+
+  <section class="verdict">
+    <div class="hot"><strong>R$ 131,11</strong><p>é o maior recolhimento por nota, em Fortaleza — 13% do valor da compra</p></div>
+    <div><strong>Quase o dobro</strong><p>é quanto a unidade do Lucro Presumido recolhe a mais que a do Simples, em DF e MG</p></div>
+    <div><strong>Rio de Janeiro</strong><p>é a única praça sem nada a recolher na entrada: preço da nota é custo final</p></div>
+  </section>
+
+  <div class="controls">
+    <h2>Imposto recolhido por fora do preço, por praça e regime</h2>
+    <div class="filter" role="group" aria-label="Filtrar por regime tributário">
+      <button type="button" data-f="all" aria-pressed="true">Todas as praças</button>
+      <button type="button" data-f="simples" aria-pressed="false">Simples Nacional</button>
+      <button type="button" data-f="lp" aria-pressed="false">Lucro Presumido</button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Praça</th>
+        <th scope="col">Regime</th>
+        <th scope="col">O que é devido</th>
+        <th scope="col">Valor na nota de referência</th>
+        <th scope="col" class="bar-cell">Sobre o valor da compra</th>
+        <th scope="col">A cada R$ 100 mil</th>
+      </tr>
+    </thead>
+    <tbody id="rows">
+      <tr data-regime="simples" data-level="low">
+        <td class="praca">Distrito Federal<em>Brasília</em></td>
+        <td><span class="chip">Simples Nacional</span></td>
+        <td class="how">Diferença de alíquota: 12% interna − 7% interestadual</td>
+        <td>R$ 50,43</td>
+        <td class="bar-cell"><span class="bar"><i style="width:38%"></i><b>5,0%</b></span></td>
+        <td>R$ 5.000</td>
+      </tr>
+      <tr data-regime="lp" data-level="mid" class="same">
+        <td class="praca">Distrito Federal<em>Brasília</em></td>
+        <td><span class="chip">Lucro Presumido</span></td>
+        <td class="how">Antecipação com margem de 40% sobre a nota<span class="ref">1</span></td>
+        <td>R$ 98,84</td>
+        <td class="bar-cell"><span class="bar"><i style="width:75%"></i><b>9,8%</b></span></td>
+        <td>R$ 9.800</td>
+      </tr>
+      <tr data-regime="lp" data-level="low" class="grp">
+        <td class="praca">Goiás<em>Goiânia</em></td>
+        <td><span class="chip">Lucro Presumido</span></td>
+        <td class="how">DIFAL de 5%</td>
+        <td>R$ 50,43</td>
+        <td class="bar-cell"><span class="bar"><i style="width:38%"></i><b>5,0%</b></span></td>
+        <td>R$ 5.000</td>
+      </tr>
+      <tr data-regime="simples" data-level="low" class="grp">
+        <td class="praca">Minas Gerais<em>Belo Horizonte</em></td>
+        <td><span class="chip">Simples Nacional</span></td>
+        <td class="how">Diferença de alíquota: 18% interna − 12% interestadual<span class="ref">2</span></td>
+        <td>R$ 60,51</td>
+        <td class="bar-cell"><span class="bar"><i style="width:46%"></i><b>6,0%</b></span></td>
+        <td>R$ 6.000</td>
+      </tr>
+      <tr data-regime="lp" data-level="mid" class="same">
+        <td class="praca">Minas Gerais<em>Belo Horizonte</em></td>
+        <td><span class="chip">Lucro Presumido</span></td>
+        <td class="how">Substituição tributária com margem de 23,41%<span class="ref">3</span></td>
+        <td>R$ 103,01</td>
+        <td class="bar-cell"><span class="bar"><i style="width:79%"></i><b>10,2%</b></span></td>
+        <td>R$ 10.210</td>
+      </tr>
+      <tr data-regime="simples lp" data-level="zero" class="grp">
+        <td class="praca">Rio de Janeiro<em>Rio de Janeiro</em></td>
+        <td><span class="chip">Simples ou Presumido</span></td>
+        <td class="how nil">Sem DIFAL e sem substituição tributária</td>
+        <td class="nil">—</td>
+        <td class="bar-cell"><span class="bar"><i style="width:0"></i><b>0,0%</b></span></td>
+        <td class="nil">—</td>
+      </tr>
+      <tr data-regime="simples" data-level="high" class="grp">
+        <td class="praca">Ceará<em>Fortaleza</em></td>
+        <td><span class="chip">Simples Nacional</span></td>
+        <td class="how">Substituição tributária da carne, sem DIFAL<span class="ref">4</span></td>
+        <td>R$ 131,11</td>
+        <td class="bar-cell"><span class="bar"><i style="width:100%"></i><b>13,0%</b></span></td>
+        <td>R$ 13.000</td>
+      </tr>
+    </tbody>
+    <caption>
+      1. Anexo VIII do RICMS/DF — base de R$ 1.411,94 a 12%, menos o ICMS destacado na nota.<br>
+      2. Art. 3º, III do RICMS/MG afasta o DIFAL nos dois regimes. A unidade do Simples, por ser do grupo CNAE 56.1, recolhe só a diferença de alíquota, sem margem.<br>
+      3. Arts. 15 e 24, II da Parte 1 do Anexo VII do RICMS/MG — base de R$ 1.244,63 a 18%, menos o ICMS destacado; recolhimento a cada nota, antes da entrada no estado.<br>
+      4. Lei 1865/2023, art. 3º, XVI, da Sefaz-CE afasta o DIFAL; permanece a substituição tributária da carne.
+    </caption>
+  </table>
+
+  <section class="actions">
+    <h2>Onde há decisão a tomar</h2>
+    <div class="acts">
+      <div class="act">
+        <h3>Fortaleza precisa de tratamento próprio</h3>
+        <p>É a praça com o maior recolhimento por nota e a única em que o imposto extra ultrapassa 10% da compra. Vale medir o total contra fornecedor local antes de fechar volume com São Paulo.</p>
+        <span class="gain">R$ 13 mil a cada R$ 100 mil</span>
+      </div>
+      <div class="act">
+        <h3>O regime da unidade pesa mais que a praça</h3>
+        <p>Na mesma compra e no mesmo estado, o Lucro Presumido recolhe quase o dobro do Simples, em Brasília e em Belo Horizonte. Entra na conta da próxima revisão de enquadramento.</p>
+        <span class="gain">+4,8 pontos no DF · +4,2 em MG</span>
+      </div>
+      <div class="act">
+        <h3>O imposto sai do caixa antes da venda</h3>
+        <p>Em DF, MG e CE o recolhimento é nota a nota, na entrada da mercadoria, e não na apuração do mês. Compras concentradas antecipam desembolso e precisam de giro programado.</p>
+        <span class="gain">Guia por nota, antes da entrega</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Não considera o ICMS destacado na nota de compra, que integra o preço da mercadoria tanto na aquisição interestadual quanto na interna. Unidades do Lucro Presumido em regime especial de bares e restaurantes, sem crédito de ICMS.</span>
+    <span>Gestão Contadores · setembro de 2026</span>
+  </footer>
+
+</main>
+
+<script>
+  var buttons = document.querySelectorAll('.filter button');
+  var rows = document.querySelectorAll('#rows tr');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var f = btn.dataset.f;
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      rows.forEach(function (row) {
+        var show = f === 'all' || row.dataset.regime.indexOf(f) !== -1;
+        row.classList.toggle('off', !show);
+      });
+    });
+  });
+</script>
+</body>
+</html>
